@@ -2,6 +2,8 @@ const { OpenAI } = require("openai");
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const dotenv = require("dotenv");
+dotenv.config();
 
 const app = express();
 const port = 8000;
@@ -9,7 +11,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 const openai = new OpenAI({
-  apiKey: "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",
+  apiKey: `${process.env.API_KEY}`,
 });
 
 app.post("/", async (request, response) => {
@@ -27,6 +29,7 @@ app.post("/", async (request, response) => {
 
   response.json({
     output: result.choices[0].message.content,
+    left: result.usage.total_tokens,
   });
 });
 
